@@ -34,8 +34,18 @@ namespace IntegrationTesting.Web.API.Controllers
             return Ok(note);
         }
 
+        [HttpPost]
+        public async Task<ActionResult<Note>> CreateNote([FromBody] CreateNote payload)
+        {
+            var note = new Note() { Content = payload.Content };
+            _dbContext.Notes.Add(note);
+            await _dbContext.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetNote), new { id = note.Id }, note);
+        }
+
         [HttpPut("{id}")]
-        public async Task<ActionResult<Note>> UpdateNote([FromRoute] int id, string content)
+        public async Task<ActionResult<Note>> UpdateNote([FromRoute] int id, [FromBody] UpdateNote payload)
         {
             var note = await _dbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
             if (note == null)
@@ -43,7 +53,7 @@ namespace IntegrationTesting.Web.API.Controllers
                 return NotFound();
             }
 
-            note.Content = content;
+            note.Content = payload.Content;
             await _dbContext.SaveChangesAsync();
 
             return Ok(note);
@@ -61,7 +71,7 @@ namespace IntegrationTesting.Web.API.Controllers
             _dbContext.Notes.Remove(note);
             await _dbContext.SaveChangesAsync();
 
-            return Ok(note);
+            return NoContent();
         }
     }
 }
