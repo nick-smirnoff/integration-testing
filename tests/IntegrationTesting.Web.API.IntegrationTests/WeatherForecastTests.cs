@@ -2,12 +2,12 @@
 
 namespace IntegrationTesting.Web.API.IntegrationTests
 {
-    public class FixtureOneTests : IClassFixture<TestApplicationFactory>, IAsyncLifetime
+    public class WeatherForecastTests : IClassFixture<TestApplicationFactory>, IAsyncLifetime
     {
         private readonly TestApplicationFactory _factory;
         private readonly HttpClient _client;
 
-        public FixtureOneTests(TestApplicationFactory factory)
+        public WeatherForecastTests(TestApplicationFactory factory)
         {
             _factory = factory;
             _client = _factory.CreateClient();
