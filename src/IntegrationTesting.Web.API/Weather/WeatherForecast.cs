@@ -1,4 +1,4 @@
-namespace IntegrationTesting.Web.API
+namespace IntegrationTesting.Web.API.Weather
 {
     public class WeatherForecast
     {

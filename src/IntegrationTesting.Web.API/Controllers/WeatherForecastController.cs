@@ -1,3 +1,4 @@
+using IntegrationTesting.Web.API.Weather;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IntegrationTesting.Web.API.Controllers
