@@ -12,12 +12,12 @@ namespace IntegrationTesting.Web.API.IntegrationTests
 
         public Task InitializeAsync()
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public new Task DisposeAsync()
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)

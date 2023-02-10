@@ -26,7 +26,23 @@ namespace IntegrationTesting.Web.API.IntegrationTests
         [Fact]
         public async Task GetWeatherForecast_TestOne()
         {
-            var response = await _client.GetAsync("WeatherForecast/GetWeatherForecast");
+            var response = await _client.GetAsync("WeatherForecast");
+
+            response.IsSuccessStatusCode.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task GetWeatherForecast_TestTwo()
+        {
+            var response = await _client.GetAsync("WeatherForecast");
+
+            response.IsSuccessStatusCode.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task GetWeatherForecast_TestThree()
+        {
+            var response = await _client.GetAsync("WeatherForecast");
 
             response.IsSuccessStatusCode.Should().BeTrue();
         }
