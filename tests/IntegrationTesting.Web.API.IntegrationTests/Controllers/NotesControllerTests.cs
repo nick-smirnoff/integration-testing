@@ -89,6 +89,7 @@ namespace IntegrationTesting.Web.API.IntegrationTests.Controllers
             {
                 Content = "this is an outdated note"
             };
+            // EF will auto generate the id property
             await SetupDbContextAsync(context =>
             {
                 context.Notes.Add(existingNote);
@@ -119,6 +120,7 @@ namespace IntegrationTesting.Web.API.IntegrationTests.Controllers
             {
                 Content = "this is an old note that can go in the bin"
             };
+            // EF will auto generate the id property
             await SetupDbContextAsync(context =>
             {
                 context.Notes.Add(existingNote);
@@ -136,6 +138,7 @@ namespace IntegrationTesting.Web.API.IntegrationTests.Controllers
             {
                 Content = "this is an old note that can go in the bin and will no longer exist"
             };
+            // EF will auto generate the id property
             await SetupDbContextAsync(context =>
             {
                 context.Notes.Add(existingNote);
