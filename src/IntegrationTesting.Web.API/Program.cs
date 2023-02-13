@@ -21,6 +21,11 @@ builder.Services.AddDbContext<NotesDbContext>(options =>
         options.UseSqlServer(connection);
     }
 });
+builder.Services.AddHttpClient("weatherclient", options =>
+{
+    options.BaseAddress = new Uri(builder.Configuration["WeatherApi:BaseUrl"]);
+    options.DefaultRequestHeaders.UserAgent.ParseAdd("integration-testing-prototype");
+});
 
 var app = builder.Build();
 

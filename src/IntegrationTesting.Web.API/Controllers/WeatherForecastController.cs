@@ -1,5 +1,6 @@
 using IntegrationTesting.Web.API.Weather;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Nodes;
 
 namespace IntegrationTesting.Web.API.Controllers
 {
@@ -7,24 +8,37 @@ namespace IntegrationTesting.Web.API.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly HttpClient _client;
 
-        public WeatherForecastController()
-        { }
-
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public WeatherForecastController(IHttpClientFactory factory)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            _client = factory.CreateClient("weatherclient");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<WeatherForecast>>> GetWeatherForecast()
+        {
+            try
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+                var response = await _client.GetAsync("weatherapi/locationforecast/2.0/compact?lat=51.5&lon=0");
+                var content = await response.Content.ReadAsStringAsync();
+                var json = JsonObject.Parse(content);
+                var timeseries = json["properties"]["timeseries"].AsArray();
+                var result = timeseries.Select(node =>
+                {
+                    return new WeatherForecast()
+                    {
+                        Date = node["time"].ToString(),
+                        Temperature = node["data"]["instant"]["details"]["air_temperature"].ToString(),
+                    };
+                }).ToList();
+
+                return Ok(result);
+            }
+            catch
+            {
+                return StatusCode(418);
+            }
         }
     }
 }
