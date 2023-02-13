@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using WireMock.Server;
 
 namespace IntegrationTesting.Web.API.IntegrationTests
 {
@@ -45,10 +46,13 @@ namespace IntegrationTesting.Web.API.IntegrationTests
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            var wireMockServer = WireMockServer.Start();
+
+            builder.UseSetting("WeatherApi:BaseUrl", wireMockServer.Url);
             builder.UseSetting("ConnectionStrings:SqlServer", _dbContainer.ConnectionString);
             builder.ConfigureTestServices(services =>
             {
-
+                services.AddSingleton(wireMockServer);
             });
             builder.UseEnvironment("Development");
             base.ConfigureWebHost(builder);

@@ -1,5 +1,6 @@
 ﻿using IntegrationTesting.Web.API.Notes;
 using Microsoft.Extensions.DependencyInjection;
+using WireMock.Server;
 
 namespace IntegrationTesting.Web.API.IntegrationTests.Controllers
 {
@@ -7,11 +8,13 @@ namespace IntegrationTesting.Web.API.IntegrationTests.Controllers
     {
         protected TestApplicationFactory Factory { get; }
         protected HttpClient Client { get; }
+        protected WireMockServer WireMockServer { get; }
 
         protected ControllerFixtureBase(TestApplicationFactory factory)
         {
             Factory = factory;
             Client = factory.CreateClient();
+            WireMockServer = factory.Services.GetRequiredService<WireMockServer>();
         }
 
         public Task InitializeAsync()
@@ -21,7 +24,7 @@ namespace IntegrationTesting.Web.API.IntegrationTests.Controllers
 
         public Task DisposeAsync()
         {
-            Client.Dispose();
+            WireMockServer.Reset();
             return Task.CompletedTask;
         }
 
